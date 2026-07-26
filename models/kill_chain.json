@@ -1,0 +1,17 @@
+{
+  "transition_matrix": {
+    "initial_access": {
+      "lateral_movement": 0.9,
+      "exfiltration": 0.05,
+      "dormant": 0.05
+    },
+    "lateral_movement": {
+      "exfiltration": 0.9474,
+      "dormant": 0.0526
+    },
+    "exfiltration": {
+      "dormant": 1.0
+    }
+  },
+  "entity_states": {}
+}
