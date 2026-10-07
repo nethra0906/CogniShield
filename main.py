@@ -28,8 +28,14 @@ os.makedirs("models", exist_ok=True)
 
 
 def main():
+    # torch's RNG (LSTM weight init + batch shuffling in train_autoencoder) was
+    # previously never seeded, so two runs with the same RNG_SEED still trained
+    # different models and produced different metrics. Seed it explicitly so
+    # RNG_SEED actually makes the pipeline reproducible end-to-end.
+    torch.manual_seed(RNG_SEED)
+
     print("== 1. Generating synthetic access logs ==")
-    df = generate_dataset(n_days=14)
+    df = generate_dataset(n_days=14, seed=RNG_SEED)
     df.to_csv("data/access_logs.csv", index=False)
     print(f"   {df.shape[0]} rows | label dist:")
     print(df["label"].value_counts().to_string())

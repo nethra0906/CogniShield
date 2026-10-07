@@ -1,3 +1,4 @@
+import hashlib
 import json
 import numpy as np
 import pandas as pd
@@ -7,7 +8,12 @@ RESOURCE_VOCAB_SIZE = 64
 
 
 def _hash_bucket(value, buckets=RESOURCE_VOCAB_SIZE):
-    return hash(value) % buckets
+    # Python's built-in hash() is salted per-process (PYTHONHASHSEED), so this
+    # feature would silently change value across runs/processes even with a
+    # fixed RNG_SEED. Use a stable hash so the same resource always buckets
+    # the same way, keeping the pipeline reproducible.
+    digest = hashlib.md5(str(value).encode("utf-8")).hexdigest()
+    return int(digest, 16) % buckets
 
 
 def build_entity_history(df: pd.DataFrame, rolling_days: int = None) -> dict:

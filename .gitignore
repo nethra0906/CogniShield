@@ -15,6 +15,7 @@ data/*.csv
 data/*.json
 data/*.png
 models/*.pt
+models/*.json
 
 # IDEs and Editors
 .vscode/
